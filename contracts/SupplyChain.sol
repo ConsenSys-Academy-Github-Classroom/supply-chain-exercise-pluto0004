@@ -42,6 +42,8 @@ contract SupplyChain {
   event LogReceived(uint sku);
 
 
+  event LogInfo(uint, uint);
+
   /* 
    * Modifiers
    */
@@ -60,7 +62,7 @@ contract SupplyChain {
   }
 
   modifier paidEnough(uint _price) { 
-    require(msg.value >= _price); 
+    assert(msg.value >= _price); 
     _;
   }
 
@@ -140,7 +142,6 @@ contract SupplyChain {
   //      sure the buyer is refunded any excess ether sent. 
   // 6. call the event associated with this function!
   function buyItem(uint sku) public payable forSale(sku) paidEnough(items[sku].price) checkValue(sku) {
-
     items[sku].seller.transfer(items[sku].price);
     items[sku].buyer = msg.sender;
     items[sku].state = State.Sold;
